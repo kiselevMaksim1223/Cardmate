@@ -12,6 +12,7 @@ import {
 } from '@mui/material'
 
 import { CardPackType, CardType } from '../../api/packs-navigation-api'
+import { formattedDate } from '../../utils/formattedDate'
 
 import { Sort } from './packs-navigation/packs-sort/Sort'
 
@@ -22,6 +23,7 @@ type TableProps = {
 }
 
 export const TableComponent: FC<TableProps> = ({ tablePackData, tableCardsData, tableType }) => {
+  //arrays for creating tablehead rows
   const packs = [
     { title: 'Name', sort: { isSorted: true, sortTitle: 'name' } },
     { title: 'Cards', sort: { isSorted: true, sortTitle: 'cardsCount' } },
@@ -37,9 +39,9 @@ export const TableComponent: FC<TableProps> = ({ tablePackData, tableCardsData, 
   ]
 
   return (
-    <TableContainer component={Paper}>
-      <Table aria-label="simple table">
-        <TableHead sx={{ background: '#EFEFEF' }}>
+    <TableContainer component={Paper} sx={{ margin: '20px 0' }}>
+      <Table aria-label="table">
+        <TableHead sx={{ background: '#EFEFEF', '& th': { width: '200px' } }}>
           <TableRow>
             {(tableType === 'Packs' ? packs : cards).map((cell, index) => (
               <TableCell key={index} align="center">
@@ -55,10 +57,16 @@ export const TableComponent: FC<TableProps> = ({ tablePackData, tableCardsData, 
           {tableType === 'Packs'
             ? (tablePackData as CardPackType[]).map(
                 ({ _id, name, cardsCount, updated, user_name }) => (
-                  <TableRow key={_id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                  <TableRow
+                    key={_id}
+                    sx={{
+                      '&:last-child td, &:last-child th': { border: 0 },
+                      '& td': { width: '200px' },
+                    }}
+                  >
                     <TableCell align="center">{name}</TableCell>
                     <TableCell align="center">{cardsCount}</TableCell>
-                    <TableCell align="center">{updated}</TableCell>
+                    <TableCell align="center">{formattedDate(updated)}</TableCell>
                     <TableCell align="center">{user_name}</TableCell>
                     <TableCell align="center"></TableCell>
                   </TableRow>

@@ -5,7 +5,7 @@ import { useSearchParams } from 'react-router-dom'
 
 import { useAppDispatch } from '../../../../app/store'
 import SuperDebouncedInput from '../../../../common/components/c8-SuperDebouncedInput/SuperDebouncedInput'
-import { searchResult } from '../packs-navigation-slice'
+import { searchResult } from '../card-packs-navigation-slice'
 
 export const Search = () => {
   const [searchParams, setSearchParams] = useSearchParams()

@@ -2,15 +2,13 @@ import React from 'react'
 
 import { useSearchParams } from 'react-router-dom'
 
-import { useAppDispatch, useAppSelector } from '../../../../app/store'
+import { useAppSelector } from '../../../../app/store'
 import SuperPagination from '../../../../common/components/c9-SuperPagination/SuperPagination'
-import { changePage, changePageCount } from '../packs-navigation-slice'
 
 export const Pagination = () => {
   const page = useAppSelector(state => state.cardsPacks.page)
   const pageCount = useAppSelector(state => state.cardsPacks.pageCount)
   const totalCount = useAppSelector(state => state.cardsPacks.cardPacksTotalCount)
-  const dispatch = useAppDispatch()
   const [searchParams, setSearchParams] = useSearchParams()
   const params = Object.fromEntries(searchParams)
 

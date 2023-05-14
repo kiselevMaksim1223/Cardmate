@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 
-import { CircularProgress } from '@mui/material'
+import { CircularProgress, Grid } from '@mui/material'
 import { Routes, Route, Navigate } from 'react-router-dom'
 
 import { Cards } from '../features/cards/Cards'
@@ -33,16 +33,24 @@ export default function App() {
           <CircularProgress />
         </div>
       ) : (
-        <Routes>
-          <Route path="/" element={<Navigate to={'/cards'} />} />
-          <Route path="/cards" element={<Cards />} />
-          <Route path="/profile" element={<Profile />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/registration" element={<Registration />} />
-          <Route path="/password_recovery" element={<PasswordRecovery />} />
-          <Route path="/entering_new_password" element={<NewPassword />} />
-          <Route path="/*" element={<ErrorComponent />} />
-        </Routes>
+        <Grid
+          container
+          justifyContent={'center'}
+          textAlign={'center'}
+          alignItems={'center'}
+          margin={'50px 0'}
+        >
+          <Routes>
+            <Route path="/" element={<Navigate to={'/cards'} />} />
+            <Route path="/cards" element={<Cards />} />
+            <Route path="/profile" element={<Profile />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/registration" element={<Registration />} />
+            <Route path="/password_recovery" element={<PasswordRecovery />} />
+            <Route path="/entering_new_password" element={<NewPassword />} />
+            <Route path="/*" element={<ErrorComponent />} />
+          </Routes>
+        </Grid>
       )}
     </div>
   )

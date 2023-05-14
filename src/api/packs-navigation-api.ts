@@ -1,7 +1,7 @@
 import { instance } from './instans-api'
 
 export const packsNavigationApi = {
-  getCardsPack(
+  getPacks(
     page?: number,
     pageCount?: number,
     search?: string,

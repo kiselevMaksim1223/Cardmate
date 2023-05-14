@@ -1,20 +1,19 @@
-import React, { ChangeEvent, SyntheticEvent, useEffect, useState } from 'react'
+import React, { ChangeEvent, useEffect, useState } from 'react'
 
-import { Box, Input, TextField } from '@mui/material'
+import { Box, TextField, Typography } from '@mui/material'
 import { useSearchParams } from 'react-router-dom'
 
-import { useAppDispatch, useAppSelector } from '../../../app/store'
+import { useAppSelector } from '../../../app/store'
 import SuperRange from '../../../common/components/c7-SuperRange/SuperRange'
 
-import { maxCardsCount, minCardsCount } from './packs-navigation-slice'
-
 export const Slider = () => {
-  const dispatch = useAppDispatch()
   const [searchParams, setSearchParams] = useSearchParams()
   const maxCardsCountServer = useAppSelector(state => state.cardsPacks.maxCardsCount)
   const params = Object.fromEntries(searchParams)
-  const [value1, setValue1] = useState<number>(0)
-  const [value2, setValue2] = useState<number | null>(maxCardsCountServer)
+  const [value1, setValue1] = useState<number>(+params.min ? +params.min : 0)
+  const [value2, setValue2] = useState<number | null>(
+    +params.max ? +params.max : maxCardsCountServer
+  )
 
   const onChangeHandler = (event: React.SyntheticEvent | Event, value: number | number[]) => {
     if (typeof value === 'object') {
@@ -40,45 +39,55 @@ export const Slider = () => {
     }
   }
 
+  /**
+   checking for params.max, if no params and maxCardsCount changed set maxCardsCount as default
+   because maxCardsCountServer equal null
+   */
   useEffect(() => {
-    dispatch(maxCardsCount(maxCardsCountServer as number))
+    if (params.max) {
+      return
+    }
     setValue2(maxCardsCountServer)
   }, [maxCardsCountServer])
 
   return (
-    <Box sx={{ display: 'flex', alignItems: 'center' }} gap={2}>
-      <TextField
-        value={value1}
-        sx={{ width: '65px' }}
-        size={'small'}
-        type="number"
-        onChange={onChangeMin}
-        InputProps={{
-          inputProps: {
-            min: 0,
-            max: 99,
-          },
-        }}
-      />
-      <SuperRange
-        value={[value1 || +params.min, (value2 as number) || (+params.max as number)]}
-        onChange={onChangeHandler}
-        onChangeCommitted={onChangeCommittedHandler}
-        aria-labelledby="input-slider"
-      />
-      <TextField
-        value={value2}
-        sx={{ width: '65px' }}
-        size={'small'}
-        type="number"
-        onChange={onChangeMax}
-        InputProps={{
-          inputProps: {
-            min: 0,
-            max: 99,
-          },
-        }}
-      />
+    <Box>
+      <Typography sx={{ display: 'block', textAlign: 'left' }}>Number of cards</Typography>
+      <Box sx={{ display: 'flex', alignItems: 'center' }} gap={2}>
+        <TextField
+          value={value1}
+          sx={{ width: '65px', fontSize: '25px' }}
+          size={'small'}
+          type="number"
+          onChange={onChangeMin}
+          InputProps={{
+            inputProps: {
+              min: 0,
+              max: 99,
+            },
+          }}
+        />
+        <SuperRange
+          value={[value1, value2 as number]}
+          // value={[+params.min ? +params.min : value1, +params.max ? +params.max : (value2 as number)]}
+          onChange={onChangeHandler}
+          onChangeCommitted={onChangeCommittedHandler}
+          aria-labelledby="input-slider"
+        />
+        <TextField
+          value={value2}
+          sx={{ width: '65px' }}
+          size={'small'}
+          type="number"
+          onChange={onChangeMax}
+          InputProps={{
+            inputProps: {
+              min: 0,
+              max: 99,
+            },
+          }}
+        />
+      </Box>
     </Box>
   )
 }

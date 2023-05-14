@@ -2,7 +2,7 @@ import { configureStore } from '@reduxjs/toolkit'
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux'
 import thunk from 'redux-thunk'
 
-import { packNavigationReducers } from '../features/cards/packs-navigation/packs-navigation-slice'
+import { packNavigationReducers } from '../features/cards/packs-navigation/card-packs-navigation-slice'
 import { authReducer } from '../features/login/auth-slice'
 import { registrationReducer } from '../features/registration/registration-slice'
 

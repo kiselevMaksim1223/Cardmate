@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
 
 import { CardPacksResponse, packsNavigationApi } from '../../../api/packs-navigation-api'
 
-const getCardsPackThunk = createAsyncThunk<
+const getCardPacksThunk = createAsyncThunk<
   { data: CardPacksResponse },
   {
     packName?: string
@@ -16,19 +16,10 @@ const getCardsPackThunk = createAsyncThunk<
   const { rejectWithValue } = thunkAPI
 
   try {
-    const res = await packsNavigationApi.getCardsPack(
-      page,
-      pageCount,
-      packName,
-      sortPacks,
-      min,
-      max
-    )
+    const res = await packsNavigationApi.getPacks(page, pageCount, packName, sortPacks, min, max)
 
     return { data: res.data }
   } catch (e) {
-    console.log(e)
-
     return rejectWithValue('')
   }
 })
@@ -55,8 +46,8 @@ const initialState: CardPacksResponse & {
   sortResult: '',
 }
 
-export const packsNavigationSlice = createSlice({
-  name: 'search',
+export const cardPacksNavigationSlice = createSlice({
+  name: 'cardPacks',
   initialState: initialState,
   reducers: {
     changePage: (state, action: PayloadAction<number>) => {
@@ -79,13 +70,13 @@ export const packsNavigationSlice = createSlice({
     },
   },
   extraReducers: builder => {
-    builder.addCase(getCardsPackThunk.fulfilled, (state, action) => {
+    builder.addCase(getCardPacksThunk.fulfilled, (state, action) => {
       return action.payload.data
     })
   },
 })
 
-export const packNavigationReducers = packsNavigationSlice.reducer
+export const packNavigationReducers = cardPacksNavigationSlice.reducer
 export const {
   changePage,
   changePageCount,
@@ -93,5 +84,5 @@ export const {
   searchResult,
   minCardsCount,
   maxCardsCount,
-} = packsNavigationSlice.actions
-export const packsNavigationThunks = { getCardsPackThunk }
+} = cardPacksNavigationSlice.actions
+export const packsNavigationThunks = { getCardPacksThunk }
