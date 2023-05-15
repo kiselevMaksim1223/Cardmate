@@ -7,12 +7,15 @@ export const packsNavigationApi = {
     search?: string,
     sort?: string,
     min?: number,
-    max?: number
+    max?: number,
+    user_id?: string
   ) {
     return instance.get<CardPacksResponse>('cards/pack', {
-      withCredentials: true,
-      params: { packName: search, sortPacks: sort, page, pageCount, min, max },
+      params: { packName: search, sortPacks: sort, page, pageCount, min, max, user_id },
     })
+  },
+  createPack(name?: string, deckCover?: string) {
+    return instance.post('cards/pack', { cardsPack: { name, deckCover } })
   },
 }
 

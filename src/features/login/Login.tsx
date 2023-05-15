@@ -57,7 +57,7 @@ export const Login = () => {
   }
 
   if (isLoggedIn) {
-    return <Navigate to={'/cards'} />
+    return <Navigate to={'/packs'} />
   }
 
   return (

@@ -1,8 +1,9 @@
-import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
 import { CardPacksResponse, packsNavigationApi } from '../../../api/packs-navigation-api'
+import { createAppAsyncThunk } from '../../../utils/create-app-asynk-thunk'
 
-const getCardPacksThunk = createAsyncThunk<
+const getCardPacksThunk = createAppAsyncThunk<
   { data: CardPacksResponse },
   {
     packName?: string
@@ -11,18 +12,42 @@ const getCardPacksThunk = createAsyncThunk<
     pageCount?: number
     min?: number
     max?: number
+    user_id?: string
   }
->('getCardPacks', async ({ packName, sortPacks, pageCount, page, min, max }, thunkAPI) => {
+>('getCardPacks', async ({ packName, sortPacks, pageCount, page, min, max, user_id }, thunkAPI) => {
   const { rejectWithValue } = thunkAPI
 
   try {
-    const res = await packsNavigationApi.getPacks(page, pageCount, packName, sortPacks, min, max)
+    const res = await packsNavigationApi.getPacks(
+      page,
+      pageCount,
+      packName,
+      sortPacks,
+      min,
+      max,
+      user_id
+    )
 
     return { data: res.data }
   } catch (e) {
-    return rejectWithValue('')
+    return rejectWithValue(null)
   }
 })
+
+const createPackThunk = createAppAsyncThunk<{}, { name?: string; deckCover?: string }>(
+  'createPack',
+  async (arg, thunkAPI) => {
+    const { rejectWithValue } = thunkAPI
+
+    try {
+      await packsNavigationApi.createPack()
+
+      return {}
+    } catch (e) {
+      return rejectWithValue(null)
+    }
+  }
+)
 
 const initialState: CardPacksResponse & {
   newPage?: number
@@ -85,4 +110,4 @@ export const {
   minCardsCount,
   maxCardsCount,
 } = cardPacksNavigationSlice.actions
-export const packsNavigationThunks = { getCardPacksThunk }
+export const packsNavigationThunks = { getCardPacksThunk, createPackThunk }

@@ -1,9 +1,9 @@
 import React, { useEffect } from 'react'
 
-import { CircularProgress, Grid } from '@mui/material'
+import { CircularProgress, Container, Grid } from '@mui/material'
 import { Routes, Route, Navigate } from 'react-router-dom'
 
-import { Cards } from '../features/cards/Cards'
+import { Packs } from '../features/cards/packs-navigation/packs'
 import { NewPassword } from '../features/enteringNewPassword/EnteringNewPassword'
 import { ErrorComponent } from '../features/Error/404Error'
 import ResponsiveAppBar from '../features/header/Header'
@@ -33,24 +33,26 @@ export default function App() {
           <CircularProgress />
         </div>
       ) : (
-        <Grid
-          container
-          justifyContent={'center'}
-          textAlign={'center'}
-          alignItems={'center'}
-          margin={'50px 0'}
-        >
-          <Routes>
-            <Route path="/" element={<Navigate to={'/cards'} />} />
-            <Route path="/cards" element={<Cards />} />
-            <Route path="/profile" element={<Profile />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/registration" element={<Registration />} />
-            <Route path="/password_recovery" element={<PasswordRecovery />} />
-            <Route path="/entering_new_password" element={<NewPassword />} />
-            <Route path="/*" element={<ErrorComponent />} />
-          </Routes>
-        </Grid>
+        <Container maxWidth={'lg'}>
+          <Grid
+            container
+            justifyContent={'center'}
+            textAlign={'center'}
+            alignItems={'center'}
+            margin={'50px 0'}
+          >
+            <Routes>
+              <Route path="/" element={<Navigate to={'/packs'} />} />
+              <Route path="/packs" element={<Packs />} />
+              <Route path="/profile" element={<Profile />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/registration" element={<Registration />} />
+              <Route path="/password_recovery" element={<PasswordRecovery />} />
+              <Route path="/entering_new_password" element={<NewPassword />} />
+              <Route path="/*" element={<ErrorComponent />} />
+            </Routes>
+          </Grid>
+        </Container>
       )}
     </div>
   )

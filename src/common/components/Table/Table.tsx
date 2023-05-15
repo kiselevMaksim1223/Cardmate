@@ -11,15 +11,16 @@ import {
   Box,
 } from '@mui/material'
 
-import { CardPackType, CardType } from '../../api/packs-navigation-api'
-import { formattedDate } from '../../utils/formattedDate'
+import { CardPackType, CardType } from '../../../api/packs-navigation-api'
+import { Sort } from '../../../features/cards/packs-navigation/packs-sort/Sort'
+import { formattedDate } from '../../../utils/formattedDate'
 
-import { Sort } from './packs-navigation/packs-sort/Sort'
+import { Actions } from './actions/Actions'
 
 type TableProps = {
   tablePackData?: CardPackType[]
   tableCardsData?: CardType[]
-  tableType: 'Packs' | 'Cards'
+  tableType: 'Packs' | 'Cards' // for table versatility (packs or cards table)
 }
 
 export const TableComponent: FC<TableProps> = ({ tablePackData, tableCardsData, tableType }) => {
@@ -32,10 +33,10 @@ export const TableComponent: FC<TableProps> = ({ tablePackData, tableCardsData, 
     { title: 'Actions', sort: { isSorted: false, sortTitle: '' } },
   ]
   const cards = [
-    { title: 'Name', sort: { isSorted: false, sortTitle: 'name' } },
+    { title: 'Question', sort: { isSorted: false, sortTitle: 'question' } },
     { title: 'Answer', sort: { isSorted: false, sortTitle: 'answer' } },
-    { title: 'Last Updated', sort: { isSorted: true, sortTitle: 'name' } },
-    { title: 'Grade', sort: { isSorted: false, sortTitle: 'name' } },
+    { title: 'Last Updated', sort: { isSorted: true, sortTitle: 'updated' } },
+    { title: 'Grade', sort: { isSorted: false, sortTitle: 'grade' } },
   ]
 
   return (
@@ -47,7 +48,12 @@ export const TableComponent: FC<TableProps> = ({ tablePackData, tableCardsData, 
               <TableCell key={index} align="center">
                 <Box sx={{ display: 'flex', justifyContent: 'center' }}>
                   <span>{cell.title}</span>
-                  {cell.sort.isSorted && <Sort sort_by={cell.sort.sortTitle} />}
+                  {cell.sort.isSorted && (
+                    <Sort
+                      sort_of={tableType === 'Packs' ? 'packs' : 'cards'}
+                      sort_by={cell.sort.sortTitle}
+                    />
+                  )}
                 </Box>
               </TableCell>
             ))}
@@ -56,7 +62,7 @@ export const TableComponent: FC<TableProps> = ({ tablePackData, tableCardsData, 
         <TableBody>
           {tableType === 'Packs'
             ? (tablePackData as CardPackType[]).map(
-                ({ _id, name, cardsCount, updated, user_name }) => (
+                ({ _id, name, cardsCount, updated, user_name, user_id }) => (
                   <TableRow
                     key={_id}
                     sx={{
@@ -68,7 +74,9 @@ export const TableComponent: FC<TableProps> = ({ tablePackData, tableCardsData, 
                     <TableCell align="center">{cardsCount}</TableCell>
                     <TableCell align="center">{formattedDate(updated)}</TableCell>
                     <TableCell align="center">{user_name}</TableCell>
-                    <TableCell align="center"></TableCell>
+                    <TableCell align="center">
+                      <Actions userId={user_id} />
+                    </TableCell>
                   </TableRow>
                 )
               )

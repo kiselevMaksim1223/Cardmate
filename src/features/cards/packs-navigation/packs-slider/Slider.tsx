@@ -3,8 +3,8 @@ import React, { ChangeEvent, useEffect, useState } from 'react'
 import { Box, TextField, Typography } from '@mui/material'
 import { useSearchParams } from 'react-router-dom'
 
-import { useAppSelector } from '../../../app/store'
-import SuperRange from '../../../common/components/c7-SuperRange/SuperRange'
+import { useAppSelector } from '../../../../app/store'
+import SuperRange from '../../../../common/components/c7-SuperRange/SuperRange'
 
 export const Slider = () => {
   const [searchParams, setSearchParams] = useSearchParams()
