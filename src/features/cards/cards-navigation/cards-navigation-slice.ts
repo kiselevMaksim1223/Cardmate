@@ -9,25 +9,13 @@ import {
 } from '../../../api/cards-navigation-api'
 import { createAppAsyncThunk } from '../../../utils/create-app-asynk-thunk'
 
-const getCardsThunk = createAppAsyncThunk<{ data: CardListResponse }, ParamsCardsType>(
+const getCardsThunk = createAppAsyncThunk<{ data: CardListResponse }, { params: ParamsCardsType }>(
   'getCards',
-  async (
-    { cardsPack_id, cardAnswer, cardQuestion, min, max, sortCards, page, pageCount },
-    thunkAPI
-  ) => {
+  async ({ params }, thunkAPI) => {
     const { rejectWithValue } = thunkAPI
 
     try {
-      const res = await cardsNavigationApi.getCards({
-        cardsPack_id,
-        cardAnswer,
-        cardQuestion,
-        min,
-        max,
-        sortCards,
-        page,
-        pageCount,
-      })
+      const res = await cardsNavigationApi.getCards(params)
 
       return { data: res.data }
     } catch (e) {
@@ -38,61 +26,54 @@ const getCardsThunk = createAppAsyncThunk<{ data: CardListResponse }, ParamsCard
 
 const createCard = createAppAsyncThunk<
   CardType,
-  { card: createCardType } & Omit<ParamsCardsType, 'cardsPack_id'>
->(
+  { card: createCardType } & { params: ParamsCardsType }
+>('createCard', async ({ card, params }, thunkAPI) => {
+  const { rejectWithValue, dispatch } = thunkAPI
+
+  try {
+    const res = await cardsNavigationApi.createCard(card)
+
+    dispatch(cardsNavigationThunks.getCardsThunk({ params }))
+
+    return { ...res }
+  } catch (e) {
+    return rejectWithValue(null)
+  }
+})
+
+const deleteCard = createAppAsyncThunk<{}, { id: string } & { params: ParamsCardsType }>(
   'createCard',
-  async (
-    {
-      card: {
-        cardsPack_id,
-        answer,
-        question,
-        grade,
-        shots,
-        answerVideo,
-        answerImg,
-        questionImg,
-        questionVideo,
-      },
-      //from this for the getCard
-      min,
-      max,
-      sortCards,
-      page,
-      pageCount,
-      cardQuestion,
-      cardAnswer,
-    },
-    thunkAPI
-  ) => {
+  async ({ id, params }, thunkAPI) => {
     const { rejectWithValue, dispatch } = thunkAPI
 
     try {
-      const res = await cardsNavigationApi.createCard({
-        cardsPack_id,
-        answer,
-        question,
-      })
+      const res = await cardsNavigationApi.deleteCard(id)
 
-      dispatch(
-        cardsNavigationThunks.getCardsThunk({
-          cardsPack_id,
-          cardAnswer,
-          cardQuestion,
-          min,
-          max,
-          sortCards,
-          page,
-          pageCount,
-        })
-      )
+      dispatch(cardsNavigationThunks.getCardsThunk({ params }))
 
-      return { ...res }
+      return {}
     } catch (e) {
       return rejectWithValue(null)
     }
   }
 )
+
+const updateCard = createAppAsyncThunk<
+  {},
+  { card: Partial<CardType> } & { params: ParamsCardsType }
+>('createCard', async ({ card, params }, thunkAPI) => {
+  const { rejectWithValue, dispatch } = thunkAPI
+
+  try {
+    const res = await cardsNavigationApi.updateCard(card)
+
+    dispatch(cardsNavigationThunks.getCardsThunk({ params }))
+
+    return {}
+  } catch (e) {
+    return rejectWithValue(null)
+  }
+})
 
 const initialState: CardListResponse & { packId?: string } = {
   cards: [],
@@ -122,4 +103,4 @@ export const cardsNavigationSlice = createSlice({
 
 export const cardsNavigationReducers = cardsNavigationSlice.reducer
 export const cardsNavigationActions = cardsNavigationSlice.actions
-export const cardsNavigationThunks = { getCardsThunk, createCard }
+export const cardsNavigationThunks = { getCardsThunk, createCard, deleteCard, updateCard }

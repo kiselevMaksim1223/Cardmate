@@ -13,6 +13,7 @@ import {
 
 import { CardType } from '../../../api/cards-navigation-api'
 import { CardPackType } from '../../../api/packs-navigation-api'
+import { useAppSelector } from '../../../app/store'
 import { Sort } from '../../../features/cards/packs-navigation/packs-sort/Sort'
 import { formattedDate } from '../../../utils/formattedDate'
 
@@ -26,6 +27,7 @@ type TableProps = {
 }
 
 export const TableComponent: FC<TableProps> = ({ tablePackData, tableCardsData, tableType }) => {
+  const myUserId = useAppSelector(state => state.auth.dataForProfilePage._id)
   //arrays for creating table-head rows
   const packs = [
     { title: 'Name', sort: { isSorted: true, sortTitle: 'name' } },
@@ -83,22 +85,26 @@ export const TableComponent: FC<TableProps> = ({ tablePackData, tableCardsData, 
                   </TableRow>
                 )
               )
-            : (tableCardsData as CardType[]).map(({ _id, question, answer, updated, grade }) => (
-                <TableRow
-                  key={_id}
-                  sx={{
-                    '&:last-child td, &:last-child th': { border: 0 },
-                  }}
-                >
-                  <TableCell align="center">{question}</TableCell>
-                  <TableCell align="center">{answer}</TableCell>
-                  <TableCell align="center">{formattedDate(updated)}</TableCell>
-                  <TableCell align="center">{grade}</TableCell>
-                  <TableCell align="center">
-                    <CardActions />
-                  </TableCell>
-                </TableRow>
-              ))}
+            : (tableCardsData as CardType[]).map(
+                ({ _id, question, answer, updated, grade, user_id }) => (
+                  <TableRow
+                    key={_id}
+                    sx={{
+                      '&:last-child td, &:last-child th': { border: 0 },
+                    }}
+                  >
+                    <TableCell align="center">{question}</TableCell>
+                    <TableCell align="center">{answer}</TableCell>
+                    <TableCell align="center">{formattedDate(updated)}</TableCell>
+                    <TableCell align="center">{grade}</TableCell>
+                    {myUserId === user_id && (
+                      <TableCell align="center">
+                        <CardActions id={_id} />
+                      </TableCell>
+                    )}
+                  </TableRow>
+                )
+              )}
         </TableBody>
       </Table>
     </TableContainer>
