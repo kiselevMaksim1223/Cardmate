@@ -9,136 +9,80 @@ import { createAppAsyncThunk } from '../../../utils/create-app-asynk-thunk'
 
 const getCardPacksThunk = createAppAsyncThunk<
   { data: CardPacksResponse },
-  Partial<ParamsPacksType>
->(
-  'getCardPacks',
-  async ({ search: packName, sort: sortPacks, pageCount, page, min, max, user_id }, thunkAPI) => {
-    const { rejectWithValue } = thunkAPI
+  { params: Partial<ParamsPacksType> }
+>('getCardPacks', async ({ params }, thunkAPI) => {
+  const { rejectWithValue } = thunkAPI
 
-    try {
-      const res = await packsNavigationApi.getPacks({
-        page,
-        pageCount,
-        search: packName,
-        sort: sortPacks,
-        min,
-        max,
-        user_id,
-      })
+  try {
+    const res = await packsNavigationApi.getPacks(params)
 
-      return { data: res.data }
-    } catch (e) {
-      return rejectWithValue(null)
-    }
+    return { data: res.data }
+  } catch (e) {
+    return rejectWithValue(null)
   }
-)
+})
 /**
  * create pack and if success get packs again and rerender page
  */
 const createPackThunk = createAppAsyncThunk<
   {},
   //this for getCardPacksThunk
-  Partial<ParamsPacksType> & {
+  { params: Partial<ParamsPacksType> } & {
     //name and deckCover for createPack
     name?: string
     deckCover?: string
   }
->(
-  'createPack',
-  async (
-    { search: packName, sort: sortPacks, min, max, name, deckCover, page, pageCount, user_id },
-    thunkAPI
-  ) => {
-    const { rejectWithValue, dispatch } = thunkAPI
+>('createPack', async ({ params, name, deckCover }, thunkAPI) => {
+  const { rejectWithValue, dispatch } = thunkAPI
 
-    try {
-      await packsNavigationApi.createPack()
-      dispatch(
-        packsNavigationThunks.getCardPacksThunk({
-          page,
-          pageCount,
-          search: packName,
-          sort: sortPacks,
-          min,
-          max,
-          user_id,
-        })
-      )
+  try {
+    await packsNavigationApi.createPack()
+    dispatch(packsNavigationThunks.getCardPacksThunk({ params }))
 
-      return {}
-    } catch (e) {
-      return rejectWithValue(null)
-    }
+    return {}
+  } catch (e) {
+    return rejectWithValue(null)
   }
-)
+})
 /**
  * delete pack and if success get packs again and rerender page
  */
-const deletePackThunk = createAppAsyncThunk<{}, Partial<ParamsPacksType> & { packId: string }>(
-  'deletePack',
-  async (
-    { packId, search: packName, sort: sortPacks, pageCount, page, min, max, user_id },
-    thunkAPI
-  ) => {
-    const { rejectWithValue, dispatch } = thunkAPI
+const deletePackThunk = createAppAsyncThunk<
+  {},
+  { params: Partial<ParamsPacksType> } & { packId: string }
+>('deletePack', async ({ params, packId }, thunkAPI) => {
+  const { rejectWithValue, dispatch } = thunkAPI
 
-    try {
-      await packsNavigationApi.deletePack(packId)
-      dispatch(
-        packsNavigationThunks.getCardPacksThunk({
-          page,
-          pageCount,
-          search: packName,
-          sort: sortPacks,
-          min,
-          max,
-          user_id,
-        })
-      )
+  try {
+    await packsNavigationApi.deletePack(packId)
+    dispatch(packsNavigationThunks.getCardPacksThunk({ params }))
 
-      return {}
-    } catch (e) {
-      return rejectWithValue(null)
-    }
+    return {}
+  } catch (e) {
+    return rejectWithValue(null)
   }
-)
+})
 
 const updatePackThunk = createAppAsyncThunk<
   {},
   //this for getCardPacksThunk
-  Partial<ParamsPacksType> & {
+  { params: Partial<ParamsPacksType> } & {
     //name and deckCover for createPack
     _id: string
     name: string
   }
->(
-  'createPack',
-  async (
-    { search: packName, sort: sortPacks, min, max, name, _id, page, pageCount, user_id },
-    thunkAPI
-  ) => {
-    const { rejectWithValue, dispatch } = thunkAPI
+>('createPack', async ({ params, name, _id }, thunkAPI) => {
+  const { rejectWithValue, dispatch } = thunkAPI
 
-    try {
-      await packsNavigationApi.updatePack(_id, name)
-      dispatch(
-        packsNavigationThunks.getCardPacksThunk({
-          page,
-          pageCount,
-          search: packName,
-          sort: sortPacks,
-          min,
-          max,
-          user_id,
-        })
-      )
+  try {
+    await packsNavigationApi.updatePack(_id, name)
+    dispatch(packsNavigationThunks.getCardPacksThunk({ params }))
 
-      return {}
-    } catch (e) {
-      return rejectWithValue(null)
-    }
+    return {}
+  } catch (e) {
+    return rejectWithValue(null)
   }
-)
+})
 
 const initialState: CardPacksResponse = {
   cardPacks: [],

@@ -28,12 +28,16 @@ export const PackActions: FC<{ userId: string; packId: string; cardsCount: numbe
     setRedirect(true)
   }
   const onClickDeletePack = () => {
-    dispatch(packsNavigationThunks.deletePackThunk({ packId, ...params })) //passing params to getPacks after deleting
+    dispatch(packsNavigationThunks.deletePackThunk({ packId, params: { ...params } })) //passing params to getPacks after deleting
   }
   const onClickUpdatePack = () => {
     dispatch(
       //passing params to getPacks after updating
-      packsNavigationThunks.updatePackThunk({ _id: packId, name: 'new updated name', ...params })
+      packsNavigationThunks.updatePackThunk({
+        _id: packId,
+        name: 'new updated name',
+        params: { ...params },
+      })
     )
   }
 

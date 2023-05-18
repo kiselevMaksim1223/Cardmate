@@ -23,7 +23,7 @@ export const Packs = () => {
   const params = Object.fromEntries(searchParams)
 
   const onClickAddPack = () => {
-    dispatch(packsNavigationThunks.createPackThunk({ ...params }))
+    dispatch(packsNavigationThunks.createPackThunk({ params: { ...params } }))
   }
 
   if (!isLoggedIn) {
@@ -31,7 +31,7 @@ export const Packs = () => {
   }
 
   useEffect(() => {
-    dispatch(packsNavigationThunks.getCardPacksThunk({ ...params }))
+    dispatch(packsNavigationThunks.getCardPacksThunk({ params: { ...params } }))
   }, [searchParams])
 
   return (

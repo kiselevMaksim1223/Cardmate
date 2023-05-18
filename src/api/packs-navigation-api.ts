@@ -20,8 +20,8 @@ export const packsNavigationApi = {
 export type ParamsPacksType = {
   page: number
   pageCount: number
-  search: string
-  sort: string
+  packName: string
+  sortPacks: string
   min: number
   max: number
   user_id: string
