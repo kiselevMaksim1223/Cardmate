@@ -9,6 +9,12 @@ export const cardsNavigationApi = {
   createCard(card: createCardType) {
     return instance.post<createCardType, CardType>('cards/card', { card })
   },
+  deleteCard(id: string) {
+    return instance.delete('cards/card', { params: { id } })
+  },
+  updateCard(card: Partial<CardType>) {
+    return instance.put('cards/card', { card })
+  },
 }
 
 export type ParamsCardsType = {

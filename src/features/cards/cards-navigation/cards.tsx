@@ -30,7 +30,7 @@ export const Cards = () => {
           question: 'new question',
           answer: 'new Answer',
         },
-        ...params,
+        params,
       })
     )
   }
@@ -43,9 +43,7 @@ export const Cards = () => {
   useEffect(() => {
     //checking if there is query params in url, it necessary for prevent empty request without cardsPack_id
     if (Object.keys(params).length) {
-      dispatch(
-        cardsNavigationThunks.getCardsThunk({ ...params, cardsPack_id: params['cardsPack_id'] })
-      )
+      dispatch(cardsNavigationThunks.getCardsThunk({ params }))
     }
   }, [searchParams])
 

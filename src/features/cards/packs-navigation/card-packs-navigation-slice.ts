@@ -103,6 +103,43 @@ const deletePackThunk = createAppAsyncThunk<{}, Partial<ParamsPacksType> & { pac
   }
 )
 
+const updatePackThunk = createAppAsyncThunk<
+  {},
+  //this for getCardPacksThunk
+  Partial<ParamsPacksType> & {
+    //name and deckCover for createPack
+    _id: string
+    name: string
+  }
+>(
+  'createPack',
+  async (
+    { search: packName, sort: sortPacks, min, max, name, _id, page, pageCount, user_id },
+    thunkAPI
+  ) => {
+    const { rejectWithValue, dispatch } = thunkAPI
+
+    try {
+      await packsNavigationApi.updatePack(_id, name)
+      dispatch(
+        packsNavigationThunks.getCardPacksThunk({
+          page,
+          pageCount,
+          search: packName,
+          sort: sortPacks,
+          min,
+          max,
+          user_id,
+        })
+      )
+
+      return {}
+    } catch (e) {
+      return rejectWithValue(null)
+    }
+  }
+)
+
 const initialState: CardPacksResponse = {
   cardPacks: [],
   cardPacksTotalCount: null,
@@ -127,4 +164,9 @@ export const cardPacksNavigationSlice = createSlice({
 
 export const packNavigationReducers = cardPacksNavigationSlice.reducer
 export const packNavigationActions = cardPacksNavigationSlice.actions
-export const packsNavigationThunks = { getCardPacksThunk, createPackThunk, deletePackThunk }
+export const packsNavigationThunks = {
+  getCardPacksThunk,
+  createPackThunk,
+  deletePackThunk,
+  updatePackThunk,
+}
