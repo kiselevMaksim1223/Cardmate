@@ -12,6 +12,9 @@ export const packsNavigationApi = {
   deletePack(packId: string) {
     return instance.delete('cards/pack', { params: { id: packId } })
   },
+  updatePack(_id: string, name: string) {
+    return instance.put('cards/pack', { cardsPack: { _id, name } })
+  },
 }
 
 export type ParamsPacksType = {

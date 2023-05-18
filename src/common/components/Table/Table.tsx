@@ -16,7 +16,8 @@ import { CardPackType } from '../../../api/packs-navigation-api'
 import { Sort } from '../../../features/cards/packs-navigation/packs-sort/Sort'
 import { formattedDate } from '../../../utils/formattedDate'
 
-import { Actions } from './actions/Actions'
+import { CardActions } from './actions/CardActions'
+import { PackActions } from './actions/PackActions'
 
 type TableProps = {
   tablePackData?: CardPackType[]
@@ -38,6 +39,7 @@ export const TableComponent: FC<TableProps> = ({ tablePackData, tableCardsData, 
     { title: 'Answer', sort: { isSorted: false, sortTitle: 'answer' } },
     { title: 'Last Updated', sort: { isSorted: true, sortTitle: 'updated' } },
     { title: 'Grade', sort: { isSorted: false, sortTitle: 'grade' } },
+    { title: '', sort: { isSorted: false, sortTitle: '' } },
   ]
 
   return (
@@ -76,17 +78,25 @@ export const TableComponent: FC<TableProps> = ({ tablePackData, tableCardsData, 
                     <TableCell align="center">{formattedDate(updated)}</TableCell>
                     <TableCell align="center">{user_name}</TableCell>
                     <TableCell align="center">
-                      <Actions userId={user_id} packId={_id} />
+                      <PackActions userId={user_id} packId={_id} cardsCount={cardsCount} />
                     </TableCell>
                   </TableRow>
                 )
               )
             : (tableCardsData as CardType[]).map(({ _id, question, answer, updated, grade }) => (
-                <TableRow key={_id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                <TableRow
+                  key={_id}
+                  sx={{
+                    '&:last-child td, &:last-child th': { border: 0 },
+                  }}
+                >
                   <TableCell align="center">{question}</TableCell>
                   <TableCell align="center">{answer}</TableCell>
-                  <TableCell align="center">{updated}</TableCell>
+                  <TableCell align="center">{formattedDate(updated)}</TableCell>
                   <TableCell align="center">{grade}</TableCell>
+                  <TableCell align="center">
+                    <CardActions />
+                  </TableCell>
                 </TableRow>
               ))}
         </TableBody>
