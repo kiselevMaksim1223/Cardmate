@@ -12,8 +12,6 @@ const SuperRange: React.FC<SliderProps> = props => {
         // стили для слайдера
       }}
       //
-      min={(props.value as number[])[0]}
-      max={(props.value as number[])[1]}
       {...props} // отдаём слайдеру пропсы если они есть (value например там внутри)
     />
   )
