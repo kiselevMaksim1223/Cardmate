@@ -71,6 +71,7 @@ export const Slider = () => {
           value={[value1, value2 as number]}
           onChange={onChangeHandler}
           onChangeCommitted={onChangeCommittedHandler}
+          max={maxCardsCountServer as number}
           aria-labelledby="input-slider"
         />
         <TextField
