@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { memo } from 'react'
 
 import ExpandLessIcon from '@mui/icons-material/ExpandLess'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
@@ -21,7 +21,7 @@ export const pureChange = (sort: string, down: string, up: string) => {
   return sort === down ? up : sort == up ? '' : down
 }
 
-const SuperSort: React.FC<SuperSortPropsType> = ({ sort, value, onChange, id = 'hw15' }) => {
+const SuperSort: React.FC<SuperSortPropsType> = memo(({ sort, value, onChange, id = 'hw15' }) => {
   const up = '1' + value
   const down = '0' + value
 
@@ -39,6 +39,6 @@ const SuperSort: React.FC<SuperSortPropsType> = ({ sort, value, onChange, id = '
       {icon}
     </span>
   )
-}
+})
 
 export default SuperSort

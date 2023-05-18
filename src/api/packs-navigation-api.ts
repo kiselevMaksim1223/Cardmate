@@ -1,22 +1,27 @@
 import { instance } from './instans-api'
 
 export const packsNavigationApi = {
-  getPacks(
-    page?: number,
-    pageCount?: number,
-    search?: string,
-    sort?: string,
-    min?: number,
-    max?: number,
-    user_id?: string
-  ) {
+  getPacks(params: Partial<ParamsPacksType>) {
     return instance.get<CardPacksResponse>('cards/pack', {
-      params: { packName: search, sortPacks: sort, page, pageCount, min, max, user_id },
+      params,
     })
   },
   createPack(name?: string, deckCover?: string) {
     return instance.post('cards/pack', { cardsPack: { name, deckCover } })
   },
+  deletePack(packId: string) {
+    return instance.delete('cards/pack', { params: { id: packId } })
+  },
+}
+
+export type ParamsPacksType = {
+  page: number
+  pageCount: number
+  search: string
+  sort: string
+  min: number
+  max: number
+  user_id: string
 }
 
 export type CardPackType = {
@@ -46,26 +51,4 @@ export type CardPacksResponse = {
   pageCount: number | null
   token: string | null
   tokenDeathTime: number | null
-}
-
-export type CardType = {
-  answer: string
-  question: string
-  cardsPack_id: string
-  grade: number
-  shots: number
-  user_id: string
-  created: string
-  updated: string
-  _id: string
-}
-
-export type CardListResponse = {
-  cards: CardType[]
-  cardsTotalCount: number
-  maxGrade: number
-  minGrade: number
-  page: number
-  pageCount: number
-  packUserId: string
 }

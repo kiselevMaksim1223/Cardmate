@@ -1,4 +1,4 @@
-import React, { FC, useState } from 'react'
+import React, { FC, memo, useEffect, useState } from 'react'
 
 import { useSearchParams } from 'react-router-dom'
 
@@ -9,7 +9,7 @@ type SortType = {
   sort_of: 'packs' | 'cards'
 }
 
-export const Sort: FC<SortType> = ({ sort_by, sort_of }) => {
+export const Sort: FC<SortType> = memo(({ sort_by, sort_of }) => {
   const [sort, setSort] = useState('')
   const [searchParams, setSearchParams] = useSearchParams()
   const params = Object.fromEntries(searchParams)
@@ -20,9 +20,15 @@ export const Sort: FC<SortType> = ({ sort_by, sort_of }) => {
     setSearchParams({ ...params, [`${sort_of === 'packs' ? 'sortPacks' : 'sortCards'}`]: newSort })
   }
 
+  useEffect(() => {
+    if (Object.keys(params).includes('sortPacks' || 'sortCards')) {
+      setSort(params[`${sort_of === 'packs' ? 'sortPacks' : 'sortCards'}`])
+    }
+  }, [])
+
   return (
     <>
       <SuperSort sort={sort} value={sort_by} onChange={onChangeHandler} id={`${sort_by}-sortId`} />
     </>
   )
-}
+})

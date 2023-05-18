@@ -1,27 +1,31 @@
-import React from 'react'
+import React, { FC, memo } from 'react'
 
 import { Box, Typography } from '@mui/material'
 import { useSearchParams } from 'react-router-dom'
 
-import { useAppDispatch } from '../../../../app/store'
 import SuperDebouncedInput from '../../../../common/components/c8-SuperDebouncedInput/SuperDebouncedInput'
-import { searchResult } from '../card-packs-navigation-slice'
 
-export const Search = () => {
+type SearchType = {
+  search_in: 'packs' | 'cards'
+}
+
+export const Search: FC<SearchType> = memo(({ search_in }) => {
   const [searchParams, setSearchParams] = useSearchParams()
 
-  const dispatch = useAppDispatch()
   const params = Object.fromEntries(searchParams)
 
   const onDebounceHandler = (searchParam: string) => {
-    dispatch(searchResult(searchParam))
-    setSearchParams({ ...params, packName: searchParam })
+    setSearchParams({
+      ...params,
+      //// заключая в квадратные скобки мы говорим какое имя свойства нам нужно исходя из проверки
+      [`${search_in === 'packs' ? 'packName' : 'cardQuestion'}`]: searchParam,
+    })
   }
 
   return (
-    <Box sx={{ textAlign: 'start' }}>
+    <Box sx={{ textAlign: 'start', width: '100%' }}>
       <Typography>Search</Typography>
       <SuperDebouncedInput onDebouncedChange={onDebounceHandler} />
     </Box>
   )
-}
+})

@@ -11,7 +11,8 @@ import {
   Box,
 } from '@mui/material'
 
-import { CardPackType, CardType } from '../../../api/packs-navigation-api'
+import { CardType } from '../../../api/cards-navigation-api'
+import { CardPackType } from '../../../api/packs-navigation-api'
 import { Sort } from '../../../features/cards/packs-navigation/packs-sort/Sort'
 import { formattedDate } from '../../../utils/formattedDate'
 
@@ -24,7 +25,7 @@ type TableProps = {
 }
 
 export const TableComponent: FC<TableProps> = ({ tablePackData, tableCardsData, tableType }) => {
-  //arrays for creating tablehead rows
+  //arrays for creating table-head rows
   const packs = [
     { title: 'Name', sort: { isSorted: true, sortTitle: 'name' } },
     { title: 'Cards', sort: { isSorted: true, sortTitle: 'cardsCount' } },
@@ -75,17 +76,17 @@ export const TableComponent: FC<TableProps> = ({ tablePackData, tableCardsData, 
                     <TableCell align="center">{formattedDate(updated)}</TableCell>
                     <TableCell align="center">{user_name}</TableCell>
                     <TableCell align="center">
-                      <Actions userId={user_id} />
+                      <Actions userId={user_id} packId={_id} />
                     </TableCell>
                   </TableRow>
                 )
               )
-            : (tableCardsData as CardType[]).map(row => (
-                <TableRow key={row._id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                  <TableCell align="center">{row.question}</TableCell>
-                  <TableCell align="center">{row.answer}</TableCell>
-                  <TableCell align="center">{row.updated}</TableCell>
-                  <TableCell align="center">{row.grade}</TableCell>
+            : (tableCardsData as CardType[]).map(({ _id, question, answer, updated, grade }) => (
+                <TableRow key={_id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                  <TableCell align="center">{question}</TableCell>
+                  <TableCell align="center">{answer}</TableCell>
+                  <TableCell align="center">{updated}</TableCell>
+                  <TableCell align="center">{grade}</TableCell>
                 </TableRow>
               ))}
         </TableBody>

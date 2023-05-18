@@ -1,46 +1,100 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { createSlice } from '@reduxjs/toolkit'
 
-import { CardPacksResponse, packsNavigationApi } from '../../../api/packs-navigation-api'
+import {
+  CardPacksResponse,
+  packsNavigationApi,
+  ParamsPacksType,
+} from '../../../api/packs-navigation-api'
 import { createAppAsyncThunk } from '../../../utils/create-app-asynk-thunk'
 
 const getCardPacksThunk = createAppAsyncThunk<
   { data: CardPacksResponse },
-  {
-    packName?: string
-    sortPacks?: string
-    page?: number
-    pageCount?: number
-    min?: number
-    max?: number
-    user_id?: string
-  }
->('getCardPacks', async ({ packName, sortPacks, pageCount, page, min, max, user_id }, thunkAPI) => {
-  const { rejectWithValue } = thunkAPI
-
-  try {
-    const res = await packsNavigationApi.getPacks(
-      page,
-      pageCount,
-      packName,
-      sortPacks,
-      min,
-      max,
-      user_id
-    )
-
-    return { data: res.data }
-  } catch (e) {
-    return rejectWithValue(null)
-  }
-})
-
-const createPackThunk = createAppAsyncThunk<{}, { name?: string; deckCover?: string }>(
-  'createPack',
-  async (arg, thunkAPI) => {
+  Partial<ParamsPacksType>
+>(
+  'getCardPacks',
+  async ({ search: packName, sort: sortPacks, pageCount, page, min, max, user_id }, thunkAPI) => {
     const { rejectWithValue } = thunkAPI
 
     try {
+      const res = await packsNavigationApi.getPacks({
+        page,
+        pageCount,
+        search: packName,
+        sort: sortPacks,
+        min,
+        max,
+        user_id,
+      })
+
+      return { data: res.data }
+    } catch (e) {
+      return rejectWithValue(null)
+    }
+  }
+)
+/**
+ * create pack and if success get packs again and rerender page
+ */
+const createPackThunk = createAppAsyncThunk<
+  {},
+  //this for getCardPacksThunk
+  Partial<ParamsPacksType> & {
+    //name and deckCover for createPack
+    name?: string
+    deckCover?: string
+  }
+>(
+  'createPack',
+  async (
+    { search: packName, sort: sortPacks, min, max, name, deckCover, page, pageCount, user_id },
+    thunkAPI
+  ) => {
+    const { rejectWithValue, dispatch } = thunkAPI
+
+    try {
       await packsNavigationApi.createPack()
+      dispatch(
+        packsNavigationThunks.getCardPacksThunk({
+          page,
+          pageCount,
+          search: packName,
+          sort: sortPacks,
+          min,
+          max,
+          user_id,
+        })
+      )
+
+      return {}
+    } catch (e) {
+      return rejectWithValue(null)
+    }
+  }
+)
+/**
+ * delete pack and if success get packs again and rerender page
+ */
+const deletePackThunk = createAppAsyncThunk<{}, Partial<ParamsPacksType> & { packId: string }>(
+  'deletePack',
+  async (
+    { packId, search: packName, sort: sortPacks, pageCount, page, min, max, user_id },
+    thunkAPI
+  ) => {
+    const { rejectWithValue, dispatch } = thunkAPI
+
+    try {
+      await packsNavigationApi.deletePack(packId)
+      dispatch(
+        packsNavigationThunks.getCardPacksThunk({
+          page,
+          pageCount,
+          search: packName,
+          sort: sortPacks,
+          min,
+          max,
+          user_id,
+        })
+      )
 
       return {}
     } catch (e) {
@@ -49,14 +103,7 @@ const createPackThunk = createAppAsyncThunk<{}, { name?: string; deckCover?: str
   }
 )
 
-const initialState: CardPacksResponse & {
-  newPage?: number
-  newCountPage?: number
-  searchResult?: string
-  sortResult?: string
-  min?: number
-  max?: number
-} = {
+const initialState: CardPacksResponse = {
   cardPacks: [],
   cardPacksTotalCount: null,
   maxCardsCount: null,
@@ -65,35 +112,12 @@ const initialState: CardPacksResponse & {
   pageCount: null,
   token: null,
   tokenDeathTime: null,
-  newPage: 1,
-  newCountPage: 4,
-  searchResult: '',
-  sortResult: '',
 }
 
 export const cardPacksNavigationSlice = createSlice({
   name: 'cardPacks',
   initialState: initialState,
-  reducers: {
-    changePage: (state, action: PayloadAction<number>) => {
-      state.newPage = action.payload
-    },
-    changePageCount: (state, action: PayloadAction<number>) => {
-      state.newCountPage = action.payload
-    },
-    searchResult: (state, action: PayloadAction<string>) => {
-      state.searchResult = action.payload
-    },
-    sortResult: (state, action: PayloadAction<string>) => {
-      state.sortResult = action.payload
-    },
-    minCardsCount: (state, action: PayloadAction<number>) => {
-      state.minCardsCount = action.payload
-    },
-    maxCardsCount: (state, action: PayloadAction<number>) => {
-      state.maxCardsCount = action.payload
-    },
-  },
+  reducers: {},
   extraReducers: builder => {
     builder.addCase(getCardPacksThunk.fulfilled, (state, action) => {
       return action.payload.data
@@ -102,12 +126,5 @@ export const cardPacksNavigationSlice = createSlice({
 })
 
 export const packNavigationReducers = cardPacksNavigationSlice.reducer
-export const {
-  changePage,
-  changePageCount,
-  sortResult,
-  searchResult,
-  minCardsCount,
-  maxCardsCount,
-} = cardPacksNavigationSlice.actions
-export const packsNavigationThunks = { getCardPacksThunk, createPackThunk }
+export const packNavigationActions = cardPacksNavigationSlice.actions
+export const packsNavigationThunks = { getCardPacksThunk, createPackThunk, deletePackThunk }

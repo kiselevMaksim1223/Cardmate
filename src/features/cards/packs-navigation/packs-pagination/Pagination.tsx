@@ -1,20 +1,20 @@
-import React from 'react'
+import React, { FC } from 'react'
 
 import { useSearchParams } from 'react-router-dom'
 
-import { useAppSelector } from '../../../../app/store'
 import SuperPagination from '../../../../common/components/c9-SuperPagination/SuperPagination'
 
-export const Pagination = () => {
-  const page = useAppSelector(state => state.cardsPacks.page)
-  const pageCount = useAppSelector(state => state.cardsPacks.pageCount)
-  const totalCount = useAppSelector(state => state.cardsPacks.cardPacksTotalCount)
+type PaginationType = {
+  page: number | null
+  pageCount: number | null
+  totalCount: number | null
+}
+
+export const Pagination: FC<PaginationType> = ({ page, pageCount, totalCount }) => {
   const [searchParams, setSearchParams] = useSearchParams()
   const params = Object.fromEntries(searchParams)
 
   const onChangeHandler = (newPage: number, newCount: number) => {
-    // dispatch(changePage(newPage))
-    // dispatch(changePageCount(newCount))
     setSearchParams({ ...params, page: newPage.toString(), pageCount: newCount.toString() })
   }
 

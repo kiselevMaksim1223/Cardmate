@@ -6,10 +6,10 @@ import { useSearchParams } from 'react-router-dom'
 import { useAppSelector } from '../../../../app/store'
 
 export const PacksToggleButton = () => {
-  const [alignment, setAlignment] = useState('all')
   const userId = useAppSelector(state => state.auth.dataForProfilePage._id)
   const [searchParams, setSearchParams] = useSearchParams()
   const params = Object.fromEntries(searchParams)
+  const [alignment, setAlignment] = useState(`${params[`user_id`] ? 'my' : 'all'}`)
 
   const handleChange = (event: React.MouseEvent<HTMLElement>, newAlignment: string) => {
     setAlignment(newAlignment)

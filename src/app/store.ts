@@ -2,6 +2,7 @@ import { configureStore } from '@reduxjs/toolkit'
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux'
 import thunk from 'redux-thunk'
 
+import { cardsNavigationReducers } from '../features/cards/cards-navigation/cards-navigation-slice'
 import { packNavigationReducers } from '../features/cards/packs-navigation/card-packs-navigation-slice'
 import { authReducer } from '../features/login/auth-slice'
 import { registrationReducer } from '../features/registration/registration-slice'
@@ -11,6 +12,7 @@ const store = configureStore({
     auth: authReducer,
     register: registrationReducer,
     cardsPacks: packNavigationReducers,
+    cards: cardsNavigationReducers,
   },
   middleware: getDefaultMiddleware => getDefaultMiddleware().prepend(thunk), // можно это и не писать т.к. санка идет по дефолту
 })

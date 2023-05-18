@@ -15,12 +15,15 @@ import { PacksToggleButton } from './packs-toggleButton/PacksToggleButton'
 
 export const Packs = () => {
   const dispatch = useAppDispatch()
-  const { cardPacks } = useAppSelector(state => state.cardsPacks)
+  const { cardPacks, page, pageCount, cardPacksTotalCount } = useAppSelector(
+    state => state.cardsPacks
+  )
   const { isLoggedIn } = useAppSelector(state => state.auth)
   const [searchParams] = useSearchParams()
+  const params = Object.fromEntries(searchParams)
 
   const onClickAddPack = () => {
-    dispatch(packsNavigationThunks.createPackThunk({}))
+    dispatch(packsNavigationThunks.createPackThunk({ ...params }))
   }
 
   if (!isLoggedIn) {
@@ -28,11 +31,7 @@ export const Packs = () => {
   }
 
   useEffect(() => {
-    const params = Object.fromEntries(searchParams)
-
-    if (params) {
-      dispatch(packsNavigationThunks.getCardPacksThunk({ ...params }))
-    }
+    dispatch(packsNavigationThunks.getCardPacksThunk({ ...params }))
   }, [searchParams])
 
   return (
@@ -60,8 +59,8 @@ export const Packs = () => {
           Add new pack
         </SuperButton>
       </Box>
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
-        <Search />
+      <Box sx={{ display: 'flex', gap: '20px', justifyContent: 'space-between', width: '100%' }}>
+        <Search search_in={'packs'} />
         <PacksToggleButton />
         <Slider />
       </Box>
@@ -72,7 +71,7 @@ export const Packs = () => {
       ) : (
         <>
           <TableComponent tableType={'Packs'} tablePackData={cardPacks} />
-          <Pagination />
+          <Pagination page={page} pageCount={pageCount} totalCount={cardPacksTotalCount} />
         </>
       )}
     </>

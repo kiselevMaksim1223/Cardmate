@@ -3,6 +3,7 @@ import React, { useEffect } from 'react'
 import { CircularProgress, Container, Grid } from '@mui/material'
 import { Routes, Route, Navigate } from 'react-router-dom'
 
+import { Cards } from '../features/cards/cards-navigation/cards'
 import { Packs } from '../features/cards/packs-navigation/packs'
 import { NewPassword } from '../features/enteringNewPassword/EnteringNewPassword'
 import { ErrorComponent } from '../features/Error/404Error'
@@ -43,12 +44,15 @@ export default function App() {
           >
             <Routes>
               <Route path="/" element={<Navigate to={'/packs'} />} />
+
               <Route path="/packs" element={<Packs />} />
+              <Route path="/cards" element={<Cards />} />
               <Route path="/profile" element={<Profile />} />
               <Route path="/login" element={<Login />} />
               <Route path="/registration" element={<Registration />} />
               <Route path="/password_recovery" element={<PasswordRecovery />} />
               <Route path="/entering_new_password" element={<NewPassword />} />
+
               <Route path="/*" element={<ErrorComponent />} />
             </Routes>
           </Grid>

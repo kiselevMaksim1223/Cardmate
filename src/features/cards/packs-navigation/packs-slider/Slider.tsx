@@ -69,7 +69,6 @@ export const Slider = () => {
         />
         <SuperRange
           value={[value1, value2 as number]}
-          // value={[+params.min ? +params.min : value1, +params.max ? +params.max : (value2 as number)]}
           onChange={onChangeHandler}
           onChangeCommitted={onChangeCommittedHandler}
           aria-labelledby="input-slider"
