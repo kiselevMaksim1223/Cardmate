@@ -1,46 +1,62 @@
-# Getting Started with Create React App
+# Cardmate - Learning Cards Application
+This is a web application built with React. The Learning Cards Application allows users to create, delete, and read learning cards shared by other users.
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Technologies Used
 
-## Available Scripts
+The Learning Cards Application is built using the following technologies:
 
-In the project directory, you can run:
+-   **React**: A JavaScript library for building user interfaces.
+-   **Redux Toolkit**: A toolset for efficient Redux development, providing simplified state management.
+-  **Redux Thunk**: A middleware for Redux that enables asynchronous logic and side effects.
+-   **Material-UI (MUI)**: A popular React UI framework that provides pre-built components and styling options.
+-   **TypeScript**: A statically typed superset of JavaScript that enhances code reliability and maintainability.
+-   **React Hook Form**: A library for easy and efficient form handling in React.
+-   **Sass**: A CSS preprocessor that enhances styling capabilities with variables, mixins, and more.
 
-### `yarn start`
+## Installation
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+To run the Learning Cards Application locally, follow these steps:
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+1.  Clone the repository:
+    
+    bashCopy code
+    `git clone https://github.com/kiselevMaksim1223/Cardmate` 
+    
+2.  Navigate to the project directory:
+    
+    bashCopy code
+    `cd cardmate` 
+    
+3.  Install the dependencies using npm or yarn:
+    
+    bashCopy code
+    `npm install` 
+    
+    or
+    
+    bashCopy code
+    `yarn` 
+    
+4.  Start the application:
+    
+    bashCopy code
+    `npm start` 
+    
+    or
+    
+    bashCopy code
+    `yarn start` 
+    
+5.  Open your browser and visit `http://localhost:3000` to access the Learning Cards Application.
+    
+Feel free to explore the application, create your own learning cards, delete them when necessary, and browse the learning cards shared by other users.
 
-### `yarn test`
+## Demo
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+A deployed version of the Learning Cards Application is available for testing. You can access it at [https://resilient-longma-bef37c.netlify.app/](https://resilient-longma-bef37c.netlify.app/).
 
-### `yarn build`
+Please note that the deployed version may not reflect the latest changes or updates made to the application.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## Contributing
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `yarn eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/). https://www.figma.com/file/C1HxtTFYhUh57G3z18rn5v/Обучение-по-карточкам?node-id=34242%3A6 https://neko-back.herokuapp.com/2.0
+Contributions to the Learning Cards Application are welcome! If you find any bugs, have feature suggestions, or want to contribute to the project, please open an issue or submit a pull request on the GitHub repository.
